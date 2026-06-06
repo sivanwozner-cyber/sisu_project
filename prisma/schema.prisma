@@ -1,0 +1,146 @@
+// Prisma schema — Price/Benefits Finder
+// PostgreSQL (Supabase). Authorization is enforced in the app layer (no RLS).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum BenefitType {
+  discount
+  cashback
+  gift
+  birthday
+}
+
+enum JobStatus {
+  pending
+  running
+  done
+  failed
+}
+
+model User {
+  id              String     @id @default(uuid()) @db.Uuid
+  email           String     @unique
+  name            String?
+  googleId        String     @unique @map("google_id")
+  birthdate       DateTime?  @db.Date
+  profileComplete Boolean    @default(false) @map("profile_complete")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  clubs           UserClub[]
+  jobs            Job[]
+
+  @@map("users")
+}
+
+model UserClub {
+  userId String @map("user_id") @db.Uuid
+  clubId String @map("club_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  club   Club   @relation(fields: [clubId], references: [slug], onDelete: Cascade)
+
+  @@id([userId, clubId])
+  @@map("user_clubs")
+}
+
+model Club {
+  slug          String     @id
+  name          String
+  logoUrl       String?    @map("logo_url")
+  appUrl        String?    @map("app_url")
+  scrapeTargets Json?      @map("scrape_targets")
+  users         UserClub[]
+
+  @@map("clubs")
+}
+
+model Store {
+  slug          String  @id
+  name          String
+  logoUrl       String? @map("logo_url")
+  scrapeTargets Json?   @map("scrape_targets")
+
+  @@map("stores")
+}
+
+model Mall {
+  slug          String  @id
+  name          String
+  lat           Float
+  lng           Float
+  scrapeTargets Json?   @map("scrape_targets")
+
+  @@map("malls")
+}
+
+// Normalized supermarket catalog (ingested from official price-transparency feeds).
+model Product {
+  barcode      String  @id
+  name         String
+  manufacturer String?
+  unit         String?
+  category     String?
+  prices       Price[]
+
+  @@map("products")
+}
+
+// Price per chain/branch for a product.
+model Price {
+  id          String   @id @default(uuid()) @db.Uuid
+  barcode     String
+  chainSlug   String   @map("chain_slug")
+  storeBranch String?  @map("store_branch")
+  price       Decimal  @db.Decimal(10, 2)
+  promoPrice  Decimal? @map("promo_price") @db.Decimal(10, 2)
+  ingestedAt  DateTime @default(now()) @map("ingested_at")
+  product     Product  @relation(fields: [barcode], references: [barcode], onDelete: Cascade)
+
+  @@index([barcode, chainSlug])
+  @@index([chainSlug, ingestedAt])
+  @@map("prices")
+}
+
+model BenefitCache {
+  id             String      @id @default(uuid()) @db.Uuid
+  storeSlug      String?     @map("store_slug")
+  mallSlug       String?     @map("mall_slug")
+  clubId         String?     @map("club_id")
+  description    String
+  type           BenefitType
+  discountPct    Decimal?    @map("discount_pct") @db.Decimal(5, 2)
+  discountAmount Decimal?    @map("discount_amount") @db.Decimal(10, 2)
+  validFrom      DateTime?   @map("valid_from") @db.Date
+  validTo        DateTime?   @map("valid_to") @db.Date
+  isPublic       Boolean     @default(true) @map("is_public")
+  clubAppUrl     String?     @map("club_app_url")
+  sourceUrl      String      @map("source_url")
+  imageUrl       String?     @map("image_url")
+  scrapedAt      DateTime    @default(now()) @map("scraped_at")
+
+  @@index([storeSlug, scrapedAt])
+  @@index([mallSlug, scrapedAt])
+  @@map("benefit_cache")
+}
+
+// Optional — audit / partial-failure reporting only (no polling subsystem in MVP).
+model Job {
+  id            String    @id @default(uuid()) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  type          String
+  status        JobStatus @default(pending)
+  input         Json?
+  results       Json?
+  sourcesFailed String[]  @map("sources_failed")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("jobs")
+}
