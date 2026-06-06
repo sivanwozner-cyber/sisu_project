@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($root = \"c:\\\\Users\\\\Administrator\\\\Downloads\\\\claude_sisu_project\"; New-Item -ItemType Directory -Force -Path \"$root\\\\.claude\\\\agents\" | Out-Null; New-Item -ItemType Directory -Force -Path \"$root\\\\.claude\\\\skills\" | Out-Null; New-Item -ItemType Directory -Force -Path \"$root\\\\.claude\\\\commands\" | Out-Null; \"Created.\")",
+      "PowerShell($root = \"c:\\\\Users\\\\Administrator\\\\Downloads\\\\claude_sisu_project\"; Get-ChildItem -Recurse -Force -Directory -Path \"$root\\\\.claude\" | Select-Object FullName)",
+      "PowerShell(Get-ChildItem -Force -Recurse \"$env:USERPROFILE\\\\.claude\\\\projects\\\\c--Users-Administrator-Downloads-claude-sisu-project\\\\memory\" -ErrorAction SilentlyContinue | Select-Object FullName | Out-String)",
+      "PowerShell(claude plugin install skill-creator@claude-plugins-official --scope project)",
+      "Read(//c/Users/Administrator/.claude/**)",
+      "Bash(npm --version)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Administrator\\.claude\\projects\\c--Users-Administrator-Downloads-claude-sisu-project\\memory"
+    ]
+  }
+}
