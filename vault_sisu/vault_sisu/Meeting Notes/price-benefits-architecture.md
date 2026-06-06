@@ -26,3 +26,12 @@ The project pivoted from a personal task-management system to a **public Hebrew/
   - 3 sub-agents chosen: `scrape-target-builder`, `price-feed-ingestor`, `vault-scribe` (vault protocol moved off main thread).
 - **Notes / Caveats:** No code written. Vault root confirmed as `vault_sisu/vault_sisu/`. Old PRD original remains in user's Downloads; new v3 written into the project.
 - **Related:** none (first entry on this topic)
+
+### 2026-06-06 — Build: foundation (Phases 0–2) [wip]
+- **What was done:** Plan approved. Built & verified Phases 0–2:
+  - *Phase 0:* rewrote CLAUDE.md (slim, invariants); scaffolded Next.js 14 + TS + Tailwind + shadcn foundation (RTL `app/layout.tsx`, `globals.css`, `lib/utils`); `.env.example`/`.gitignore`/`.eslintrc`. `npm run build` green.
+  - *Phase 1:* skills `price-feed-ingestion`, `benefit-extraction`; sub-agents `scrape-target-builder`, `price-feed-ingestor`, `vault-scribe` under `.claude/`.
+  - *Phase 2:* Prisma schema (users, user_clubs, clubs, stores, malls, products, prices, benefit_cache, jobs; snake_case `@@map`); `lib/prisma.ts`, `lib/auth.ts` (NextAuth Google + JWT + custom-user upsert + onboarding refresh), `types/next-auth.d.ts`, `app/api/auth/[...nextauth]`, `middleware.ts`, `prisma/seed.ts`. `prisma generate` + `npm run build` green.
+- **Decisions (why):** Bumped Next.js → `^14.2.35` (npm flagged 14.2.15 CVE). Middleware excludes `/api` so API routes self-enforce 401 (per PRD), pages get auth + onboarding redirect. `profileComplete` kept in JWT, refreshed on `trigger==="update"` so middleware gates onboarding without per-request DB hits.
+- **Notes / Caveats:** `.claude/settings.json` permissions edit (add `mcp__brightdata`/`WebFetch` allowlist) was **denied** by the auto-mode classifier (existing auto-commit/push hook flagged as self-modification) — left untouched; agents still declare tools in frontmatter. Local `.env` placeholders created (gitignored) for build only; migrations NOT run (no real DB). Build-only — did not invoke sub-agents; vault written directly.
+- **Related:** [[project-files-documentation]]
