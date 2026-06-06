@@ -5,3 +5,4 @@
 ## Topics
 
 - [[project-files-documentation]] — מיפוי ותיעוד כל קבצי הפרויקט בוולט
+- [[price-benefits-architecture]] — פיבוט לאפליקציית השוואת מחירים/הטבות; PRD v3.0 + ארכיטקטורת `.claude/` מתוכננת (skills + 3 סאב-אג'נטים)
