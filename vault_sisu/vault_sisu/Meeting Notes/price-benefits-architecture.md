@@ -9,7 +9,7 @@ The project pivoted from a personal task-management system to a **public Hebrew/
 - Representative branch vs aggregation per chain for MVP prices — user deferred.
 - Supabase project + `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed not yet run.
 - Google OAuth credentials not provided → login not runnable yet.
-- Phases 3–5 (prices UI, benefits, profile/onboarding) not yet built.
+- BrightData fetch endpoint not yet wired (`lib/brightdata.ts` throws) → benefits return cached/empty until integrated.
 
 ## Session Log
 
