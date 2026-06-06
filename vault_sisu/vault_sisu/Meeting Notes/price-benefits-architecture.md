@@ -35,3 +35,13 @@ The project pivoted from a personal task-management system to a **public Hebrew/
 - **Decisions (why):** Bumped Next.js → `^14.2.35` (npm flagged 14.2.15 CVE). Middleware excludes `/api` so API routes self-enforce 401 (per PRD), pages get auth + onboarding redirect. `profileComplete` kept in JWT, refreshed on `trigger==="update"` so middleware gates onboarding without per-request DB hits.
 - **Notes / Caveats:** `.claude/settings.json` permissions edit (add `mcp__brightdata`/`WebFetch` allowlist) was **denied** by the auto-mode classifier (existing auto-commit/push hook flagged as self-modification) — left untouched; agents still declare tools in frontmatter. Local `.env` placeholders created (gitignored) for build only; migrations NOT run (no real DB). Build-only — did not invoke sub-agents; vault written directly.
 - **Related:** [[project-files-documentation]]
+
+### 2026-06-06 — Build: features (Phases 3–5) [wip]
+- **What was done:** Built & verified (full `next build` green — 16 routes) the feature layer against sample data:
+  - *UI shell:* shadcn primitives (button/card/input/label/badge/skeleton), `app/providers.tsx` (SessionProvider), `components/sidebar.tsx`, `app/(app)/layout.tsx`; `/` → redirect to `/prices`.
+  - *Auth flows:* `/login` (Google), `/onboarding` + `/profile` sharing `components/profile-form.tsx`, `app/api/profile` (GET/PATCH with validation + `profile_complete`).
+  - *Prices:* `lib/ingestion/*` (adapter framework + upsert), `lib/prices.ts` (barcode-first grouping, lowest badge), `/api/prices/search`, `/prices` UI, `/api/cron/ingest` + `vercel.json` (6h cron); sample products/prices added to seed.
+  - *Benefits:* `lib/benefits.ts` (cache read + club filtering + `is_expired` + Haversine mall match), `lib/brightdata.ts` (stub — throws until wired), `lib/anthropic.ts` (Sonnet 4.6 LLM fallback), `/api/benefits/{by-store,nearby,birthday}`, `components/benefit-card.tsx`, `/benefits` `/nearby` `/birthday` UI.
+- **Decisions (why):** Route group `(app)` carries the sidebar; `/api` excluded from middleware so routes self-enforce 401. LLM extractor pinned to `claude-sonnet-4-6` (cost — checked against the claude-api skill, which otherwise defaults to Opus). BrightData fetch deliberately not guessed — throws `BrightDataError`, benefits degrade to cached/partial. Prices modeled as a periodically-ingested local dataset, not a per-query TTL cache.
+- **Notes / Caveats:** Runtime still needs real creds (Supabase DB, Google OAuth, BrightData token, price portals) — all deferred by user; app builds and is type-safe but unseeded/unwired flows return empty. No migrations run. Deploy (Phase 6) is user-side.
+- **Related:** [[project-files-documentation]]
