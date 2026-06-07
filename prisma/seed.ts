@@ -31,31 +31,8 @@ async function main() {
     skipDuplicates: true,
   });
 
-  // --- DEV-ONLY sample price data. Replace with real ingestion (price-feed-ingestor). ---
-  const sampleProducts = [
-    { barcode: "7290000066318", name: "חלב תנובה 3% 1 ליטר", manufacturer: "תנובה", unit: "1 ליטר", category: "מוצרי חלב" },
-    { barcode: "7290004131074", name: "קוטג' תנובה 5%", manufacturer: "תנובה", unit: "250 גרם", category: "מוצרי חלב" },
-    { barcode: "7290000041247", name: "במבה אוסם", manufacturer: "אוסם", unit: "80 גרם", category: "חטיפים" },
-  ];
-  for (const p of sampleProducts) {
-    await prisma.product.upsert({ where: { barcode: p.barcode }, update: p, create: p });
-  }
-  await prisma.price.deleteMany({
-    where: { barcode: { in: sampleProducts.map((p) => p.barcode) } },
-  });
-  await prisma.price.createMany({
-    data: [
-      { barcode: "7290000066318", chainSlug: "shufersal", price: 6.9 },
-      { barcode: "7290000066318", chainSlug: "rami-levy", price: 5.9 },
-      { barcode: "7290000066318", chainSlug: "yochananof", price: 6.5 },
-      { barcode: "7290004131074", chainSlug: "shufersal", price: 7.5 },
-      { barcode: "7290004131074", chainSlug: "rami-levy", price: 6.9, promoPrice: 5.9 },
-      { barcode: "7290000041247", chainSlug: "carrefour", price: 4.2 },
-      { barcode: "7290000041247", chainSlug: "rami-levy", price: 3.9 },
-    ],
-  });
-
-  console.log("Seed complete: clubs, stores, malls, sample products/prices.");
+  console.log("Seed complete: clubs, stores, malls.");
+  console.log("Run /api/cron/ingest (or `adapters[].ingest()`) to populate products/prices from the official feeds.");
 }
 
 main()
