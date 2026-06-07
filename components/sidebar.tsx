@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Tag, Store, MapPin, Cake, User, LogOut } from "lucide-react";
+import { Tag, Store, MapPin, Cake, User, LogOut, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -15,11 +15,24 @@ const links = [
   { href: "/profile", label: "פרופיל", icon: User },
 ];
 
-export function Sidebar() {
+export function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-l bg-card p-4">
-      <div className="mb-6 px-2 text-lg font-bold">מחירים והטבות</div>
+    <aside className="flex h-full w-64 shrink-0 flex-col border-l bg-card p-4">
+      <div className="mb-6 flex items-center justify-between px-2">
+        <span className="text-lg font-bold">מחירים והטבות</span>
+        {onClose && (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="סגירת תפריט ניווט"
+            className="md:hidden"
+            onClick={onClose}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        )}
+      </div>
       <nav className="flex flex-1 flex-col gap-1">
         {links.map(({ href, label, icon: Icon }) => (
           <Link
