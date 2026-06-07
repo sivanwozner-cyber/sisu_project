@@ -3,10 +3,33 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  // scrape_targets shape is consumed by lib/benefits-parse.ts (regex over the
+  // markdown BrightData returns). Real selectors/URLs are discovered & refined
+  // by the `scrape-target-builder` agent — see lib/benefits/scrape-targets.sample.json.
+  // These are illustrative defaults; the cache-miss path only hits them once
+  // seeded benefit_cache rows age past their TTL.
+  const birthdayTargets = (url: string, club: string) => ({
+    benefits: {
+      urls: [url],
+      tool: "scrape_as_markdown",
+      defaults: { type: "birthday", is_public: false, club_id: club },
+    },
+  });
+
   await prisma.club.createMany({
     data: [
-      { slug: "cal", name: "כאל", appUrl: "https://www.cal-online.co.il/" },
-      { slug: "leumi-card", name: "לאומי קארד", appUrl: "https://www.max.co.il/" },
+      {
+        slug: "cal",
+        name: "כאל",
+        appUrl: "https://www.cal-online.co.il/",
+        scrapeTargets: birthdayTargets("https://www.cal-online.co.il/benefits", "cal"),
+      },
+      {
+        slug: "leumi-card",
+        name: "לאומי קארד",
+        appUrl: "https://www.max.co.il/",
+        scrapeTargets: birthdayTargets("https://www.max.co.il/benefits", "leumi-card"),
+      },
       { slug: "moadon-haverim", name: "מועדון חברים", appUrl: "https://www.moadon-haverim.co.il/" },
       { slug: "jurocum", name: "יורוקום", appUrl: "https://www.jurocum.co.il/" },
     ],
@@ -15,7 +38,17 @@ async function main() {
 
   await prisma.store.createMany({
     data: [
-      { slug: "shufersal", name: "שופרסל" },
+      {
+        slug: "shufersal",
+        name: "שופרסל",
+        scrapeTargets: {
+          benefits: {
+            urls: ["https://www.shufersal.co.il/online/he/promotions"],
+            tool: "scrape_as_markdown",
+            defaults: { type: "discount", is_public: true, club_id: null },
+          },
+        },
+      },
       { slug: "rami-levy", name: "רמי לוי" },
       { slug: "carrefour", name: "קרפור" },
       { slug: "yochananof", name: "יוחננוף" },
@@ -25,7 +58,19 @@ async function main() {
 
   await prisma.mall.createMany({
     data: [
-      { slug: "azrieli", name: "קניון עזריאלי", lat: 32.0735, lng: 34.7925 },
+      {
+        slug: "azrieli",
+        name: "קניון עזריאלי",
+        lat: 32.0735,
+        lng: 34.7925,
+        scrapeTargets: {
+          benefits: {
+            urls: ["https://www.azrieli.com/mall/benefits"],
+            tool: "scrape_as_markdown",
+            defaults: { type: "discount", is_public: true, club_id: null },
+          },
+        },
+      },
       { slug: "ramat-aviv", name: "קניון רמת אביב", lat: 32.1133, lng: 34.8029 },
     ],
     skipDuplicates: true,
