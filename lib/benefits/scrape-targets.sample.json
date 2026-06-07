@@ -1,0 +1,46 @@
+{
+  "azrieli": {
+    "benefits": {
+      "urls": [
+        "https://www.azrielimalls.co.il/malls/tel-aviv/coupons",
+        "https://www.azrielimalls.co.il/malls/jerusalem/coupons",
+        "https://www.azrielimalls.co.il/malls/haifa/coupons"
+      ],
+      "tool": "scrape_as_markdown",
+      "blockSplit": "(?=^###\\s+.+ב-[\\d.,]+\\s*₪\\s*במקום\\s*[\\d.,]+\\s*₪)",
+      "fields": {
+        "description": "^###\\s+(.+?)\\s+ב-[\\d.,]+\\s*₪\\s*במקום\\s*[\\d.,]+\\s*₪",
+        "discount_pct": null,
+        "discount_amount": "ב-([\\d.,]+)\\s*₪\\s*במקום\\s*([\\d.,]+)\\s*₪",
+        "valid_to": "בתוקף עד:\\s*(\\d{1,2}\\.\\d{1,2}\\.\\d{2,4})"
+      },
+      "fieldNotes": {
+        "discount_amount": "Capture group 1 = sale price (ב-X ₪), capture group 2 = original price (במקום Y ₪). discount_amount = group2 - group1 (computed in code, e.g. 59.90 - 39.90 = 20.00 ₪). discount_pct stays null because the source publishes absolute ₪ savings, not percentages.",
+        "valid_to": "Format DD.MM.YY (e.g. 30.06.26) — must be normalized to ISO8601 (e.g. 2026-06-30) before storage. Two-digit year assumed to be 20YY.",
+        "valid_from": "Not published on this page for any sampled card -> always null.",
+        "club_id": "Azrieli mall coupons are public (no login wall observed) -> club_id stays null, is_public = true.",
+        "image_url": "Each card includes one or two ![alt](url) markdown images (brand logo + product photo). Take the LAST image in the block (product photo) via regex: !\\[[^\\]]*\\]\\((/_next/image\\?url=[^)]+)\\) — prefer the one closest to the ### heading.",
+        "source_url": "Use the page URL the block was scraped from (one of `urls`)."
+      },
+      "defaults": { "type": "discount", "is_public": true, "club_id": null }
+    }
+  },
+  "shufersal": {
+    "benefits": {
+      "status": "v2 - blocked (personalized/login-gated)",
+      "urls": [
+        "https://www.shufersal.co.il/online/he/Club_Benefits"
+      ],
+      "tool": "scrape_as_markdown",
+      "blockSplit": null,
+      "fields": {
+        "description": null,
+        "discount_pct": null,
+        "discount_amount": null,
+        "valid_to": null
+      },
+      "defaults": { "type": "discount", "is_public": false, "club_id": "shufersal" },
+      "notes": "Page is mostly navigational/personalized: 'מועדון לקוחות שופרסל מעניק הטבות אישיות וקופונים אישיים' (individual member-only coupons). The one concrete sample text found ('3 ק\"ג בהנחה ... בתוקף עד 02.02.2018') is stale cached content, not a live public listing. No stable repeating block structure for anonymous/public visitors was found -> requires authenticated session to see real benefits. Out of MVP scope; mark as v2 / needs login. Azrieli mall coupons used instead as the validated MVP source."
+    }
+  }
+}
