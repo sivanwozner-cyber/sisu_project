@@ -100,7 +100,110 @@ async function main() {
     ],
   });
 
-  console.log("Seed complete: clubs, stores, malls, sample products/prices.");
+  // --- DEV-ONLY sample benefit cache. Real rows come from the BrightData
+  // cache-miss path (lib/benefits.ts). scrapedAt defaults to now() so these are
+  // fresh and served as cache hits by /benefits, /nearby, /birthday. ---
+  const day = (offset: number) => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + offset);
+    return d;
+  };
+
+  await prisma.benefitCache.deleteMany({});
+  await prisma.benefitCache.createMany({
+    data: [
+      // Store benefits (shufersal / rami-levy)
+      {
+        storeSlug: "shufersal",
+        description: "20% הנחה על קנייה מעל ₪200 במחלקת הפירות והירקות",
+        type: "discount",
+        discountPct: 20,
+        validTo: day(21),
+        isPublic: true,
+        sourceUrl: "https://www.shufersal.co.il/online/he/promotions",
+      },
+      {
+        storeSlug: "shufersal",
+        clubId: "cal",
+        description: "קאשבק ₪30 בתשלום עם כרטיס כאל בשופרסל",
+        type: "cashback",
+        discountAmount: 30,
+        validTo: day(45),
+        isPublic: false,
+        clubAppUrl: "https://www.cal-online.co.il/",
+        sourceUrl: "https://www.shufersal.co.il/online/he/promotions",
+      },
+      {
+        storeSlug: "rami-levy",
+        description: "1+1 על מוצרי החלב של תנובה",
+        type: "gift",
+        validTo: day(7),
+        isPublic: true,
+        sourceUrl: "https://www.rami-levy.co.il/he/online/sales",
+      },
+      {
+        storeSlug: "rami-levy",
+        description: "מבצע שהסתיים — 15% על מאפים",
+        type: "discount",
+        discountPct: 15,
+        validTo: day(-3),
+        isPublic: true,
+        sourceUrl: "https://www.rami-levy.co.il/he/online/sales",
+      },
+      // Mall benefits (azrieli / ramat-aviv)
+      {
+        mallSlug: "azrieli",
+        description: "10% הנחה ברשתות האופנה בהצגת אפליקציית עזריאלי",
+        type: "discount",
+        discountPct: 10,
+        validTo: day(60),
+        isPublic: true,
+        sourceUrl: "https://www.azrieli.com/mall/benefits",
+      },
+      {
+        mallSlug: "azrieli",
+        description: "כניסה חינם לחניון בסופי שבוע (מבצע עתידי)",
+        type: "gift",
+        validFrom: day(10),
+        validTo: day(40),
+        isPublic: true,
+        sourceUrl: "https://www.azrieli.com/mall/benefits",
+      },
+      {
+        mallSlug: "ramat-aviv",
+        description: "מתנה בשווי ₪50 בקנייה מעל ₪400",
+        type: "gift",
+        discountAmount: 50,
+        validTo: day(30),
+        isPublic: true,
+        sourceUrl: "https://www.ramat-aviv-mall.co.il/benefits",
+      },
+      // Birthday benefits (per club)
+      {
+        clubId: "cal",
+        description: "הטבת יום הולדת: ₪50 מתנה לחברי מועדון כאל",
+        type: "birthday",
+        discountAmount: 50,
+        isPublic: false,
+        clubAppUrl: "https://www.cal-online.co.il/",
+        sourceUrl: "https://www.cal-online.co.il/benefits",
+      },
+      {
+        clubId: "leumi-card",
+        description: "הטבת יום הולדת: 25% הנחה ברשתות נבחרות עם max",
+        type: "birthday",
+        discountPct: 25,
+        isPublic: false,
+        clubAppUrl: "https://www.max.co.il/",
+        sourceUrl: "https://www.max.co.il/benefits",
+      },
+    ],
+  });
+
+  console.log(
+    "Seed complete: clubs, stores, malls, sample products/prices, benefit_cache.",
+  );
 }
 
 main()
