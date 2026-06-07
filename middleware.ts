@@ -18,7 +18,7 @@ export default withAuth(
     return NextResponse.next();
   },
   {
-    callbacks: { authorized: () => true },
+    callbacks: { authorized: ({ token }) => !!token },
     pages: { signIn: "/login" },
   },
 );
