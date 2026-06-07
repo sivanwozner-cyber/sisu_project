@@ -63,10 +63,26 @@ async function main() {
         name: "קניון עזריאלי",
         lat: 32.0735,
         lng: 34.7925,
+        // Real config discovered & verified live by `scrape-target-builder`
+        // (see lib/benefits/scrape-targets.sample.json + .README.md). discount_amount
+        // captures "ב-{sale} במקום {original}" — the parser computes original − sale.
         scrapeTargets: {
           benefits: {
-            urls: ["https://www.azrieli.com/mall/benefits"],
+            urls: [
+              "https://www.azrielimalls.co.il/malls/tel-aviv/coupons",
+              "https://www.azrielimalls.co.il/malls/jerusalem/coupons",
+              "https://www.azrielimalls.co.il/malls/haifa/coupons",
+            ],
             tool: "scrape_as_markdown",
+            blockSplit:
+              "(?=^###\\s+.+ב-[\\d.,]+\\s*₪\\s*במקום\\s*[\\d.,]+\\s*₪)",
+            fields: {
+              description:
+                "^###\\s+(.+?)\\s+ב-[\\d.,]+\\s*₪\\s*במקום\\s*[\\d.,]+\\s*₪",
+              discount_amount:
+                "ב-([\\d.,]+)\\s*₪\\s*במקום\\s*([\\d.,]+)\\s*₪",
+              valid_to: "בתוקף עד:\\s*(\\d{1,2}\\.\\d{1,2}\\.\\d{2,4})",
+            },
             defaults: { type: "discount", is_public: true, club_id: null },
           },
         },
