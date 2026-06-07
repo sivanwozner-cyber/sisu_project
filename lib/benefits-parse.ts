@@ -65,10 +65,24 @@ function strFrom(re: string | undefined, block: string): string | null {
 }
 
 function numFrom(re: string | undefined, block: string): number | null {
-  const raw = strFrom(re, block);
-  if (raw == null) return null;
-  const n = parseFloat(raw.replace(/[^\d.]/g, ""));
-  return Number.isFinite(n) ? n : null;
+  if (!re) return null;
+  let m: RegExpMatchArray | null;
+  try {
+    m = block.match(new RegExp(re, "m"));
+  } catch {
+    return null;
+  }
+  if (!m) return null;
+  const groups = m.slice(1).filter((g): g is string => g != null);
+  const nums = (groups.length ? groups : [m[0]])
+    .map((g) => parseFloat(g.replace(/[^\d.]/g, "")))
+    .filter((n) => Number.isFinite(n));
+  if (nums.length === 0) return null;
+  // Two-number "ב-X ₪ במקום Y ₪" savings pattern → absolute saving (original − sale).
+  if (nums.length >= 2) {
+    return Math.abs(Math.max(...nums) - Math.min(...nums));
+  }
+  return nums[0];
 }
 
 function dateFrom(re: string | undefined, block: string): string | null {
