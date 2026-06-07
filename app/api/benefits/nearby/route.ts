@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { benefits, upcoming_count } = await getNearbyBenefits(
+  const { benefits, upcoming_count, sources_failed } = await getNearbyBenefits(
     malls.map((m) => m.slug),
     Boolean(body?.include_upcoming),
   );
@@ -39,6 +39,6 @@ export async function POST(req: Request) {
     matched_malls: malls,
     benefits,
     upcoming_count,
-    sources_failed: [],
+    sources_failed,
   });
 }
