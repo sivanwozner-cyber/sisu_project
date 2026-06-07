@@ -23,6 +23,6 @@ export async function POST(req: Request) {
   }
 
   const birthMonth = Number(birthdate.slice(5, 7));
-  const benefits = await getBirthdayBenefits();
-  return NextResponse.json({ birth_month: birthMonth, benefits });
+  const { benefits, sources_failed } = await getBirthdayBenefits();
+  return NextResponse.json({ birth_month: birthMonth, benefits, sources_failed });
 }
