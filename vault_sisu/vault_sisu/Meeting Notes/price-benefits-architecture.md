@@ -4,12 +4,11 @@
 The project pivoted from a personal task-management system to a **public Hebrew/RTL price-comparison + benefits-finder web app** (replaces the old task system entirely). Stack: Next.js 14 (App Router) + TypeScript, Prisma, Supabase Postgres, NextAuth (Google OAuth), Tailwind + shadcn/ui. Two data sources: **official Israeli price-transparency feeds** for supermarket prices (not HTML scraping) and **BrightData** for benefits (clubs/malls/birthday). PRD v3.0 lives at repo-root `PRD-price-benefits-finder.md` and is intended to feed Claude Code Plan Mode. This topic also covers the planned `.claude/` architecture redesign (CLAUDE.md slimming, new skills, 3 sub-agents).
 
 ## Open Questions
-- Exact price-portal URLs + credentials per chain — user will provide later (blocks real price ingestion, Phase 3).
-- `scrape_targets` for benefit sources not yet discovered (`scrape-target-builder` agent).
-- Representative branch vs aggregation per chain for MVP prices — user deferred.
-- Supabase project + `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed not yet run.
+- Supabase project + real `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed still cannot be run (seed code is ready and waiting).
+- Live `BRIGHTDATA_API_TOKEN` + `BRIGHTDATA_ZONE` not provided → cache-miss pipeline (fetch→parse→persist) wired but not exercised end-to-end.
+- Representative branch vs aggregation per chain for MVP prices (PRD §17) — still open/deferred.
 - Google OAuth credentials not provided → login not runnable yet.
-- BrightData fetch endpoint not yet wired (`lib/brightdata.ts` throws) → benefits return cached/empty until integrated.
+- More chain adapters needed (Rami Levy, Carrefour, Yochananof) following the proven Shufersal pattern; more benefit `scrape_targets` to discover (Shufersal benefits page is login-gated → deferred to v2, needs authenticated approach).
 - `headroom-ai` installed as a dependency but NOT yet integrated into the LLM fallback path (`lib/anthropic.ts`) → no token-compression in effect yet; decide whether/where to apply it.
 
 ## Session Log
