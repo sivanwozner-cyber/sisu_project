@@ -1,4 +1,5 @@
 import type { ChainAdapter } from "./types";
+import { shufersal } from "./shufersal";
 
 /**
  * Registry of per-chain adapters. Populated by the `price-feed-ingestor`
@@ -9,4 +10,4 @@ import type { ChainAdapter } from "./types";
  *   import { ramiLevy } from "./rami-levy";
  *   export const adapters: ChainAdapter[] = [ramiLevy];
  */
-export const adapters: ChainAdapter[] = [];
+export const adapters: ChainAdapter[] = [shufersal];
