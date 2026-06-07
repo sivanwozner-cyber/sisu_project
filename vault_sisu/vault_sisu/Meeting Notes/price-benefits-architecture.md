@@ -10,6 +10,7 @@ The project pivoted from a personal task-management system to a **public Hebrew/
 - Supabase project + `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed not yet run.
 - Google OAuth credentials not provided → login not runnable yet.
 - BrightData fetch endpoint not yet wired (`lib/brightdata.ts` throws) → benefits return cached/empty until integrated.
+- `headroom-ai` installed as a dependency but NOT yet integrated into the LLM fallback path (`lib/anthropic.ts`) → no token-compression in effect yet; decide whether/where to apply it.
 
 ## Session Log
 
