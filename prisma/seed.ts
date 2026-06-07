@@ -175,7 +175,7 @@ async function main() {
         discountPct: 10,
         validTo: day(60),
         isPublic: true,
-        sourceUrl: "https://www.azrieli.com/mall/benefits",
+        sourceUrl: "https://www.azrielimalls.co.il/malls/tel-aviv/coupons",
       },
       {
         mallSlug: "azrieli",
@@ -184,7 +184,7 @@ async function main() {
         validFrom: day(10),
         validTo: day(40),
         isPublic: true,
-        sourceUrl: "https://www.azrieli.com/mall/benefits",
+        sourceUrl: "https://www.azrielimalls.co.il/malls/tel-aviv/coupons",
       },
       {
         mallSlug: "ramat-aviv",
