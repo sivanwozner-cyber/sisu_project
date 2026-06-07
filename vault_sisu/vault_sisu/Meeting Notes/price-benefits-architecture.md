@@ -3,9 +3,11 @@
 ## Overview
 The project pivoted from a personal task-management system to a **public Hebrew/RTL price-comparison + benefits-finder web app** (replaces the old task system entirely). Stack: Next.js 14 (App Router) + TypeScript, Prisma, Supabase Postgres, NextAuth (Google OAuth), Tailwind + shadcn/ui. Two data sources: **official Israeli price-transparency feeds** for supermarket prices (not HTML scraping) and **BrightData** for benefits (clubs/malls/birthday). PRD v3.0 lives at repo-root `PRD-price-benefits-finder.md` and is intended to feed Claude Code Plan Mode. This topic also covers the planned `.claude/` architecture redesign (CLAUDE.md slimming, new skills, 3 sub-agents).
 
+**Current status (2026-06-07):** Price-ingestion adapters for 4 chains (shufersal, rami-levy, carrefour, yochananof) are **built** under `lib/ingestion/` but unverified live (no sandbox network/credentials). Mobile-responsive nav shipped (`app-shell.tsx`). Seed cleaned of sample-price overwrites. The benefits-side `scrape_targets` build-out is **blocked** pending a `BRIGHTDATA_API_TOKEN`.
+
 ## Open Questions
-- Exact price-portal URLs + credentials per chain — user will provide later (blocks real price ingestion, Phase 3).
-- `scrape_targets` for benefit sources not yet discovered (`scrape-target-builder` agent).
+- Exact price-portal credentials per chain (rami-levy, carrefour, yochananof, shufersal) — adapters built but **not verified live** (no sandbox network access); user must supply `CERBERUS_*`/`SHUFERSAL_*`/`RAMI_LEVY_*`/`CARREFOUR_*`/`YOCHANANOF_*` env vars from `.env.example`.
+- `scrape_targets` for benefit sources — **blocked**: `scrape-target-builder` needs an active `BRIGHTDATA_API_TOKEN`, not present in env. Cannot proceed until user provides it.
 - Representative branch vs aggregation per chain for MVP prices — user deferred.
 - Supabase project + `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed not yet run.
 - Google OAuth credentials not provided → login not runnable yet.
@@ -44,4 +46,13 @@ The project pivoted from a personal task-management system to a **public Hebrew/
   - *Benefits:* `lib/benefits.ts` (cache read + club filtering + `is_expired` + Haversine mall match), `lib/brightdata.ts` (stub — throws until wired), `lib/anthropic.ts` (Sonnet 4.6 LLM fallback), `/api/benefits/{by-store,nearby,birthday}`, `components/benefit-card.tsx`, `/benefits` `/nearby` `/birthday` UI.
 - **Decisions (why):** Route group `(app)` carries the sidebar; `/api` excluded from middleware so routes self-enforce 401. LLM extractor pinned to `claude-sonnet-4-6` (cost — checked against the claude-api skill, which otherwise defaults to Opus). BrightData fetch deliberately not guessed — throws `BrightDataError`, benefits degrade to cached/partial. Prices modeled as a periodically-ingested local dataset, not a per-query TTL cache.
 - **Notes / Caveats:** Runtime still needs real creds (Supabase DB, Google OAuth, BrightData token, price portals) — all deferred by user; app builds and is type-safe but unseeded/unwired flows return empty. No migrations run. Deploy (Phase 6) is user-side.
+- **Related:** [[project-files-documentation]]
+
+### 2026-06-07 — Mobile Claude Code session: ingestion adapters + nav + seed cleanup [shipped]
+- **What was done:** Three commits pushed to branch `claude/remaining-tasks-7FxJ7`:
+  - `b2534f5` — Built 4 real price-ingestion adapters under `lib/ingestion/` (shufersal, rami-levy, carrefour, yochananof): `feed-parser.ts` (deterministic gzip/XML parsing), `cerberus.ts` (client for the shared "Cerberus" portal `url.publishedprices.co.il` used by Rami Levy/Carrefour/Yochananof), `shufersal.ts` (Shufersal's own portal client), `normalize.ts` (barcode-keyed normalization + promo-price merge); wired into `lib/ingestion/index.ts` registry; added required env vars to `.env.example` (`CERBERUS_BASE_URL`, `RAMI_LEVY_USERNAME/PASSWORD/BRANCH_ID`, `CARREFOUR_*`, `YOCHANANOF_*`, `SHUFERSAL_*`).
+  - `9d0b5b6` — Responsive mobile nav: new `components/app-shell.tsx` (drawer/hamburger for small screens), `components/sidebar.tsx` updated with `onClose` support, `app/(app)/layout.tsx` wired to the new shell.
+  - `687a49b` — Removed the "DEV-ONLY sample price data" block from `prisma/seed.ts` — it was overwriting real prices now landing via the new adapters.
+- **Decisions (why):** Adapters split by portal family (Cerberus shared client vs. Shufersal standalone) to mirror how the chains actually expose their official transparency feeds — avoids duplicating auth/parsing logic across 3 of the 4 chains. Seed's sample-price block removed because it conflicted with real ingested data (would silently mask adapter bugs/empty results).
+- **Notes / Caveats:** Could **not** verify any adapter live — sandbox has no network access to the price portals, and chain credentials (`RAMI_LEVY_*`, `CARREFOUR_*`, `YOCHANANOF_*`, `SHUFERSAL_*`) don't exist yet; user must provide them. Separately, the `scrape-target-builder` task (benefits `scrape_targets` for clubs/stores/malls) remains **blocked** — no `BRIGHTDATA_API_TOKEN` in the environment, agent cannot run BrightData MCP calls without it.
 - **Related:** [[project-files-documentation]]
