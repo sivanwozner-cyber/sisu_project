@@ -7,15 +7,16 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground",
-        secondary: "border-transparent bg-secondary text-secondary-foreground",
-        outline: "text-foreground",
-        // Benefit types (PRD §7.2)
-        discount: "border-transparent bg-blue-100 text-blue-800",
-        cashback: "border-transparent bg-green-100 text-green-800",
-        gift: "border-transparent bg-purple-100 text-purple-800",
-        birthday: "border-transparent bg-orange-100 text-orange-800",
-        lowest: "border-transparent bg-green-600 text-white",
+        default: "border-transparent bg-brand-gradient text-primary-foreground",
+        secondary: "border-white/15 bg-white/10 text-foreground",
+        outline: "border-white/20 text-foreground",
+        // Benefit types (PRD §7.2) — translucent tints for the dark theme
+        discount: "border-sky-400/30 bg-sky-400/15 text-sky-200",
+        cashback: "border-emerald-400/30 bg-emerald-400/15 text-emerald-200",
+        gift: "border-fuchsia-400/30 bg-fuchsia-400/15 text-fuchsia-200",
+        birthday: "border-amber-400/30 bg-amber-400/15 text-amber-200",
+        lowest:
+          "border-transparent bg-emerald-400/20 text-emerald-200 shadow-[0_0_18px_-4px_rgba(16,185,129,0.7)]",
       },
     },
     defaultVariants: { variant: "default" },
