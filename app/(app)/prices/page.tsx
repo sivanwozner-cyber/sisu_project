@@ -57,7 +57,14 @@ export default function PricesPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-2xl font-bold">השוואת מחירים</h1>
+      <header className="space-y-1">
+        <h1 className="text-gradient text-3xl font-extrabold tracking-tight">
+          השוואת מחירים
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          מצאו את המחיר הזול ביותר בין רשתות הסופר.
+        </p>
+      </header>
 
       <form onSubmit={search} className="flex gap-2">
         <Input
