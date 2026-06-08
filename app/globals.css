@@ -3,49 +3,30 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
-
+  /* Aurora Glass — single dark theme (light mode removed by design). */
+  :root,
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 197 45% 5%;
+    --foreground: 180 22% 96%;
+    --card: 197 40% 8%;
+    --card-foreground: 180 22% 96%;
+    --popover: 197 44% 7%;
+    --popover-foreground: 180 22% 96%;
+    --primary: 174 84% 55%;
+    --primary-foreground: 197 50% 6%;
+    --secondary: 266 70% 66%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 200 25% 16%;
+    --muted-foreground: 195 16% 62%;
+    --accent: 266 70% 66%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 190 30% 22%;
+    --input: 195 28% 18%;
+    --ring: 174 84% 55%;
+    --radius: 0.85rem;
+    color-scheme: dark;
   }
 }
 
@@ -53,8 +34,108 @@
   * {
     @apply border-border;
   }
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
   body {
     @apply bg-background text-foreground;
-    font-family: Rubik, Heebo, "Segoe UI", system-ui, sans-serif;
+    font-family: Heebo, Rubik, "Segoe UI", system-ui, sans-serif;
+    /* Dark base so the fixed aurora layer always sits on darkness. */
+    background-color: hsl(var(--background));
+  }
+  ::selection {
+    background: rgba(29, 233, 214, 0.28);
+    color: #fff;
+  }
+  /* Dark, slim scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(29, 233, 214, 0.4);
+    background-clip: padding-box;
+  }
+}
+
+@layer utilities {
+  /* Frosted glass surfaces */
+  .glass {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .glass-card {
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+      0 16px 40px -24px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Gradient text (teal → violet) */
+  .text-gradient {
+    background: linear-gradient(135deg, #5eead4 0%, #38bdf8 45%, #c084fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Colored glows */
+  .glow {
+    box-shadow: 0 0 0 1px rgba(29, 233, 214, 0.18),
+      0 8px 40px -8px rgba(29, 233, 214, 0.45);
+  }
+  .glow-strong {
+    box-shadow: 0 0 0 1px rgba(29, 233, 214, 0.25),
+      0 12px 60px -10px rgba(29, 233, 214, 0.6);
+  }
+
+  /* Skeleton shimmer sweep on a dark base */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.07),
+      transparent
+    );
+    animation: shimmer 1.6s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
