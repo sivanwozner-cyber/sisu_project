@@ -65,20 +65,35 @@ export function ProfileForm({
       <div className="space-y-3">
         <Label>מועדוני חבר</Label>
         <div className="grid grid-cols-2 gap-2">
-          {clubs.map((c) => (
-            <label
-              key={c.slug}
-              className="flex cursor-pointer items-center gap-2 rounded-md border p-3 text-sm"
-            >
-              <input
-                type="checkbox"
-                className="h-4 w-4 accent-primary"
-                checked={selected.includes(c.slug)}
-                onChange={() => toggle(c.slug)}
-              />
-              {c.name}
-            </label>
-          ))}
+          {clubs.map((c) => {
+            const on = selected.includes(c.slug);
+            return (
+              <button
+                type="button"
+                key={c.slug}
+                onClick={() => toggle(c.slug)}
+                aria-pressed={on}
+                className={cn(
+                  "flex items-center gap-2 rounded-xl border px-3 py-3 text-sm font-medium transition-all duration-200",
+                  on
+                    ? "border-aurora-teal/40 bg-brand-gradient-soft text-foreground shadow-glow-sm"
+                    : "border-white/10 bg-white/[0.03] text-muted-foreground hover:border-white/20 hover:text-foreground",
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex h-4 w-4 shrink-0 items-center justify-center rounded-md border text-[10px]",
+                    on
+                      ? "border-transparent bg-brand-gradient text-primary-foreground"
+                      : "border-white/25",
+                  )}
+                >
+                  {on ? "✓" : ""}
+                </span>
+                {c.name}
+              </button>
+            );
+          })}
         </div>
       </div>
 
