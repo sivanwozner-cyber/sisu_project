@@ -7,7 +7,6 @@ The project pivoted from a personal task-management system to a **public Hebrew/
 - Supabase project + real `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed still cannot be run (seed code is ready and waiting).
 - Live `BRIGHTDATA_API_TOKEN` + `BRIGHTDATA_ZONE` not provided → cache-miss pipeline (fetch→parse→persist) wired but not exercised end-to-end.
 - Representative branch vs aggregation per chain for MVP prices (PRD §17) — still open/deferred.
-- Google OAuth credentials not provided → login not runnable yet.
 - More chain adapters needed (Rami Levy, Carrefour, Yochananof) following the proven Shufersal pattern; more benefit `scrape_targets` to discover (Shufersal benefits page is login-gated → deferred to v2, needs authenticated approach).
 - `headroom-ai` installed as a dependency but NOT yet integrated into the LLM fallback path (`lib/anthropic.ts`) → no token-compression in effect yet; decide whether/where to apply it.
 
