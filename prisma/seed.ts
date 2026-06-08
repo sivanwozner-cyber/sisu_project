@@ -272,7 +272,7 @@ async function main() {
         sourceUrl: "https://www.cal-online.co.il/benefits",
       },
       {
-        clubId: "leumi-card",
+        clubId: "max",
         description: "הטבת יום הולדת: 25% הנחה ברשתות נבחרות עם max",
         type: "birthday",
         discountPct: 25,
