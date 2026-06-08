@@ -69,9 +69,9 @@ export default function NearbyPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold">הטבות בקרבתי</h1>
+      <h1 className="text-gradient text-2xl font-bold">הטבות בקרבתי</h1>
 
-      <div className="space-y-3 rounded-lg border p-4">
+      <div className="glass space-y-3 rounded-2xl p-4 shadow-soft">
         <Button onClick={locate} className="gap-2">
           <MapPin className="h-4 w-4" />
           אתר אותי

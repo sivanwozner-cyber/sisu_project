@@ -4,48 +4,27 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Soft-glass design system (see .claude/skills/soft-glass-design-system) */
+    --background: 240 60% 97%;
+    --foreground: 240 32% 22%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 240 32% 22%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --popover-foreground: 240 32% 22%;
+    --primary: 255 75% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 22 92% 62%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 30% 94%;
+    --muted-foreground: 240 14% 50%;
+    --accent: 280 70% 66%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 30% 88%;
+    --input: 0 0% 100%;
+    --ring: 255 75% 62%;
+    --radius: 1rem;
   }
 }
 
@@ -56,5 +35,94 @@
   body {
     @apply bg-background text-foreground;
     font-family: Rubik, Heebo, "Segoe UI", system-ui, sans-serif;
+    background-image:
+      radial-gradient(
+        70% 60% at 8% 0%,
+        hsl(224 80% 80% / 0.9) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        60% 55% at 100% 18%,
+        hsl(270 70% 84% / 0.85) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        75% 70% at 90% 100%,
+        hsl(26 95% 82% / 0.85) 0%,
+        transparent 55%
+      ),
+      linear-gradient(
+        135deg,
+        hsl(224 70% 86%) 0%,
+        hsl(262 55% 88%) 50%,
+        hsl(28 88% 88%) 100%
+      );
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+}
+
+@layer components {
+  /* Frosted glass surface — base for cards, panels, nav. */
+  .glass {
+    background-color: hsl(0 0% 100% / 0.55);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid hsl(0 0% 100% / 0.6);
+  }
+
+  /* Warm gradient text for hero/brand headings. */
+  .text-gradient {
+    background-image: linear-gradient(
+      120deg,
+      hsl(255 75% 60%) 0%,
+      hsl(300 70% 62%) 45%,
+      hsl(22 92% 60%) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Soft accent ring + tint for active/selected elements. */
+  .ring-soft {
+    border: 1px solid hsl(var(--primary) / 0.35);
+    box-shadow: 0 4px 18px -6px hsl(var(--primary) / 0.4);
+    background-color: hsl(var(--primary) / 0.08);
+  }
+
+  /* Shimmer loading effect on light surfaces. */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+    background-color: hsl(240 30% 92% / 0.7);
+  }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(0 0% 100% / 0.7) 50%,
+      transparent 100%
+    );
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
