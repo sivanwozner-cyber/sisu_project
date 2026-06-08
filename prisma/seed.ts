@@ -16,25 +16,91 @@ async function main() {
     },
   });
 
-  await prisma.club.createMany({
-    data: [
-      {
-        slug: "cal",
-        name: "כאל",
-        appUrl: "https://www.cal-online.co.il/",
-        scrapeTargets: birthdayTargets("https://www.cal-online.co.il/benefits", "cal"),
-      },
-      {
-        slug: "leumi-card",
-        name: "לאומי קארד",
-        appUrl: "https://www.max.co.il/",
-        scrapeTargets: birthdayTargets("https://www.max.co.il/benefits", "leumi-card"),
-      },
-      { slug: "moadon-haverim", name: "מועדון חברים", appUrl: "https://www.moadon-haverim.co.il/" },
-      { slug: "jurocum", name: "יורוקום", appUrl: "https://www.jurocum.co.il/" },
-    ],
-    skipDuplicates: true,
-  });
+  // Comprehensive list of real Israeli loyalty/benefit clubs shown in the
+  // profile picker (components/profile-form.tsx). slug + name drive the UI;
+  // appUrl is a best-effort homepage for the "open app" link. scrapeTargets are
+  // intentionally null for most — they're built per-club by the
+  // scrape-target-builder agent. cal/max keep birthday targets as live examples.
+  const clubs: {
+    slug: string;
+    name: string;
+    appUrl: string;
+    scrapeTargets?: ReturnType<typeof birthdayTargets>;
+  }[] = [
+    // --- כרטיסי אשראי / פיננסים ---
+    { slug: "isracard", name: "ישראכרט", appUrl: "https://www.isracard.co.il/" },
+    {
+      slug: "cal",
+      name: "כאל",
+      appUrl: "https://www.cal-online.co.il/",
+      scrapeTargets: birthdayTargets("https://www.cal-online.co.il/benefits", "cal"),
+    },
+    {
+      slug: "max",
+      name: "מקס (לשעבר לאומי קארד)",
+      appUrl: "https://www.max.co.il/",
+      scrapeTargets: birthdayTargets("https://www.max.co.il/benefits", "max"),
+    },
+    { slug: "american-express", name: "אמריקן אקספרס", appUrl: "https://www.americanexpress.co.il/" },
+
+    // --- מועדוני סופר / פארם ---
+    { slug: "shufersal-club", name: "מועדון שופרסל", appUrl: "https://www.shufersal.co.il/" },
+    { slug: "rami-levy-club", name: "מועדון רמי לוי", appUrl: "https://www.rami-levy.co.il/" },
+    { slug: "victory", name: "מועדון ויקטורי", appUrl: "https://www.victoryonline.co.il/" },
+    { slug: "yochananof-club", name: "מועדון יוחננוף", appUrl: "https://www.yochananof.co.il/" },
+    { slug: "tiv-taam", name: "מועדון טיב טעם", appUrl: "https://www.tivtaam.co.il/" },
+    { slug: "osher-ad", name: "מועדון אושר עד", appUrl: "https://www.osherad.co.il/" },
+    { slug: "super-pharm-lifestyle", name: "LifeStyle (סופר-פארם)", appUrl: "https://www.super-pharm.co.il/" },
+    { slug: "new-pharm", name: "ניו-פארם", appUrl: "https://www.newpharm.co.il/" },
+    { slug: "good-pharm", name: "גוד פארם", appUrl: "https://www.goodpharm.co.il/" },
+
+    // --- אופנה / לייפסטייל ---
+    { slug: "fox", name: "מועדון FOX", appUrl: "https://www.fox.co.il/" },
+    { slug: "castro", name: "מועדון קסטרו", appUrl: "https://www.castro.com/" },
+    { slug: "renuar", name: "רנואר", appUrl: "https://www.renuar.co.il/" },
+    { slug: "golf", name: "מועדון גולף", appUrl: "https://www.golf.co.il/" },
+    { slug: "terminalx", name: "טרמינל X", appUrl: "https://www.terminalx.com/" },
+    { slug: "h-and-o", name: "H&O", appUrl: "https://www.h-o.co.il/" },
+    { slug: "factory54", name: "פקטורי 54", appUrl: "https://www.factory54.co.il/" },
+
+    // --- חשמל / בית ---
+    { slug: "ksp", name: "KSP", appUrl: "https://ksp.co.il/" },
+    { slug: "bug", name: "מועדון באג", appUrl: "https://www.bug.co.il/" },
+    { slug: "ivory", name: "אייבורי", appUrl: "https://www.ivory.co.il/" },
+    { slug: "mahsanei-hashmal", name: "מחסני חשמל", appUrl: "https://www.mahsanei-hashmal.com/" },
+    { slug: "ace", name: "מועדון אייס", appUrl: "https://www.ace.co.il/" },
+    { slug: "home-center", name: "הום סנטר", appUrl: "https://www.homecenter.co.il/" },
+
+    // --- אוכל / פנאי ---
+    { slug: "aroma", name: "מועדון ארומה", appUrl: "https://www.aroma.co.il/" },
+    { slug: "cofix", name: "קופיקס", appUrl: "https://www.cofix.co.il/" },
+    { slug: "mcdonalds", name: "מקדונלד'ס", appUrl: "https://www.mcdonalds.co.il/" },
+    { slug: "issta", name: "מועדון איסתא", appUrl: "https://www.issta.co.il/" },
+
+    // --- ארגוני צרכנות / חברות ---
+    { slug: "hever", name: "חבר", appUrl: "https://www.hvr.co.il/" },
+    { slug: "behatzdaa", name: "בהצדעה", appUrl: "https://www.behatzdaa.org.il/" },
+    { slug: "moadon-haverim", name: "מועדון חברים", appUrl: "https://www.moadon-haverim.co.il/" },
+    { slug: "jurocum", name: "יורוקום", appUrl: "https://www.jurocum.co.il/" },
+
+    // --- תקשורת ---
+    { slug: "cellcom", name: "מועדון סלקום", appUrl: "https://www.cellcom.co.il/" },
+    { slug: "partner", name: "מועדון פרטנר", appUrl: "https://www.partner.co.il/" },
+    { slug: "hot", name: "מועדון הוט", appUrl: "https://www.hot.net.il/" },
+  ];
+
+  // Remove the legacy "leumi-card" slug (rebranded to "max").
+  await prisma.userClub.deleteMany({ where: { clubId: "leumi-card" } });
+  await prisma.club.deleteMany({ where: { slug: "leumi-card" } });
+
+  // Upsert (not createMany+skipDuplicates) so names/urls refresh on re-seed.
+  for (const c of clubs) {
+    await prisma.club.upsert({
+      where: { slug: c.slug },
+      update: { name: c.name, appUrl: c.appUrl, scrapeTargets: c.scrapeTargets ?? undefined },
+      create: { slug: c.slug, name: c.name, appUrl: c.appUrl, scrapeTargets: c.scrapeTargets },
+    });
+  }
 
   await prisma.store.createMany({
     data: [
