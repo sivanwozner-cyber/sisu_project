@@ -19,7 +19,7 @@ export default withAuth(
     return NextResponse.next();
   },
   {
-    callbacks: { authorized: ({ token }) => !!token },
+    callbacks: { authorized: ({ token }) => IS_DEMO || !!token },
     pages: { signIn: "/login" },
   },
 );
