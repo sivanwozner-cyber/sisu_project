@@ -50,9 +50,16 @@ export default function BirthdayPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold">הטבות יום הולדת</h1>
+      <header className="space-y-1">
+        <h1 className="text-gradient text-3xl font-extrabold tracking-tight">
+          הטבות יום הולדת
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          הטבות שמגיעות לכם בחודש יום ההולדת לפי המועדונים שלכם.
+        </p>
+      </header>
 
-      <div className="space-y-3 rounded-lg border p-4">
+      <div className="glass-card space-y-3 rounded-2xl p-5">
         <div className="space-y-2">
           <Label htmlFor="bd">תאריך לידה</Label>
           <Input
