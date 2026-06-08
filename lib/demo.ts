@@ -337,3 +337,10 @@ export const demoProfile: {
   birthdate: "1990-05-14",
   clubs: ["cal"],
 };
+
+export const DEMO_CLUBS: { slug: string; name: string }[] = [
+  { slug: "cal", name: "כאל" },
+  { slug: "jurocum", name: "יורוקום" },
+  { slug: "leumi-card", name: "לאומי קארד" },
+  { slug: "moadon-haverim", name: "מועדון חברים" },
+];
