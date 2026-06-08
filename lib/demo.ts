@@ -1,7 +1,10 @@
 /**
  * DEV-ONLY demo mode. Lets the whole app be navigated without a live database
- * or Google OAuth, so the UX flow can be reviewed visually. Gated on
- * NEXT_PUBLIC_DEMO=1 AND a non-production build — it can never activate in prod.
+ * or Google OAuth, so the UX flow can be reviewed visually.
+ *
+ * Default: ON in any non-production build (with no OAuth configured you can't
+ * log in anyway), OFF in production. To exercise the real auth/DB flow in dev,
+ * set NEXT_PUBLIC_DEMO=0. It can never activate in a production build.
  *
  * It does NOT weaken the security model: the demo user id is a server-side
  * constant (never taken from the request body), and every API route still runs
@@ -9,7 +12,7 @@
  */
 export const IS_DEMO =
   process.env.NODE_ENV !== "production" &&
-  process.env.NEXT_PUBLIC_DEMO === "1";
+  process.env.NEXT_PUBLIC_DEMO !== "0";
 
 export const DEMO_USER = {
   id: "demo-user",
