@@ -41,6 +41,8 @@ export async function GET() {
   if (!sessionUser)
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
+  if (IS_DEMO) return NextResponse.json(demoSerialize());
+
   const user = await prisma.user.findUnique({
     where: { id: sessionUser.id },
     include: { clubs: true },
