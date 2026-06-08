@@ -109,7 +109,7 @@ export function ProfileForm({
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
-      {savedMsg && <p className="text-sm text-green-600">{savedMsg}</p>}
+      {savedMsg && <p className="text-sm text-emerald-300">{savedMsg}</p>}
 
       <div className="flex gap-3">
         <Button onClick={() => submit()} disabled={saving}>
