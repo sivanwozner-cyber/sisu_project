@@ -27,9 +27,29 @@ const TYPE_LABEL: Record<Benefit["type"], string> = {
   birthday: "יום הולדת",
 };
 
+// Colored accent strip (inline-start edge) per benefit type.
+const TYPE_ACCENT: Record<Benefit["type"], string> = {
+  discount: "bg-sky-400",
+  cashback: "bg-emerald-400",
+  gift: "bg-fuchsia-400",
+  birthday: "bg-amber-400",
+};
+
 export function BenefitCard({ benefit }: { benefit: Benefit }) {
   return (
-    <Card className={cn(benefit.is_expired && "opacity-50")}>
+    <Card
+      className={cn(
+        "relative overflow-hidden",
+        benefit.is_expired && "opacity-50",
+      )}
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-y-0 end-0 w-1",
+          TYPE_ACCENT[benefit.type],
+        )}
+      />
       <CardContent className="space-y-2 p-4">
         <div className="flex items-center justify-between gap-2">
           <Badge variant={benefit.type}>{TYPE_LABEL[benefit.type]}</Badge>
@@ -37,9 +57,9 @@ export function BenefitCard({ benefit }: { benefit: Benefit }) {
             <span className="text-xs text-muted-foreground">פג תוקף</span>
           )}
         </div>
-        <p className="text-sm">{benefit.description}</p>
+        <p className="text-sm text-foreground/90">{benefit.description}</p>
         {(benefit.discount_pct != null || benefit.discount_amount != null) && (
-          <p className="text-sm font-semibold">
+          <p className="text-gradient text-base font-bold">
             {benefit.discount_pct != null
               ? `${benefit.discount_pct}% הנחה`
               : `₪${benefit.discount_amount} הנחה`}
@@ -55,7 +75,7 @@ export function BenefitCard({ benefit }: { benefit: Benefit }) {
             href={benefit.club_app_url}
             target="_blank"
             rel="noreferrer"
-            className="inline-block text-sm font-medium text-primary hover:underline"
+            className="inline-block text-sm font-semibold text-aurora-teal transition-colors hover:text-aurora-cyan hover:underline"
           >
             לאפליקציה ←
           </a>
