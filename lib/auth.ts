@@ -1,6 +1,7 @@
 import { type NextAuthOptions, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
+import { IS_DEMO, DEMO_USER } from "@/lib/demo";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
