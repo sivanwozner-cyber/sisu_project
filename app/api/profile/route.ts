@@ -76,6 +76,13 @@ export async function PATCH(req: Request) {
   }
 
   const clubIds = Array.isArray(body.clubs) ? body.clubs : [];
+
+  if (IS_DEMO) {
+    demoProfile.birthdate = birthdate ?? null;
+    demoProfile.clubs = clubIds;
+    return NextResponse.json(demoSerialize());
+  }
+
   if (clubIds.length) {
     const existing = await prisma.club.findMany({
       where: { slug: { in: clubIds } },
