@@ -1,8 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
+import { IS_DEMO, DEMO_USER, demoProfile } from "@/lib/demo";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function demoSerialize() {
+  return {
+    id: DEMO_USER.id,
+    name: DEMO_USER.name,
+    email: DEMO_USER.email,
+    birthdate: demoProfile.birthdate,
+    clubs: demoProfile.clubs,
+    profile_complete: true,
+  };
+}
 
 type UserWithClubs = {
   id: string;
@@ -28,6 +40,8 @@ export async function GET() {
   const sessionUser = await getSessionUser();
   if (!sessionUser)
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+
+  if (IS_DEMO) return NextResponse.json(demoSerialize());
 
   const user = await prisma.user.findUnique({
     where: { id: sessionUser.id },
@@ -62,6 +76,13 @@ export async function PATCH(req: Request) {
   }
 
   const clubIds = Array.isArray(body.clubs) ? body.clubs : [];
+
+  if (IS_DEMO) {
+    demoProfile.birthdate = birthdate ?? null;
+    demoProfile.clubs = clubIds;
+    return NextResponse.json(demoSerialize());
+  }
+
   if (clubIds.length) {
     const existing = await prisma.club.findMany({
       where: { slug: { in: clubIds } },

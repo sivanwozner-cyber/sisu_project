@@ -1,5 +1,6 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
+import { IS_DEMO } from "@/lib/demo";
 
 // Protects pages (not /api — API routes self-enforce via getSessionUser → 401).
 export default withAuth(
@@ -18,7 +19,7 @@ export default withAuth(
     return NextResponse.next();
   },
   {
-    callbacks: { authorized: ({ token }) => !!token },
+    callbacks: { authorized: ({ token }) => IS_DEMO || !!token },
     pages: { signIn: "/login" },
   },
 );

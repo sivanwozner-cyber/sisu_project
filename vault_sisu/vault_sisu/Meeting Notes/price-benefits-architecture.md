@@ -7,7 +7,6 @@ The project pivoted from a personal task-management system to a **public Hebrew/
 - Supabase project + real `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed still cannot be run (seed code is ready and waiting).
 - Live `BRIGHTDATA_API_TOKEN` + `BRIGHTDATA_ZONE` not provided → cache-miss pipeline (fetch→parse→persist) wired but not exercised end-to-end.
 - Representative branch vs aggregation per chain for MVP prices (PRD §17) — still open/deferred.
-- Google OAuth credentials not provided → login not runnable yet.
 - More chain adapters needed (Rami Levy, Carrefour, Yochananof) following the proven Shufersal pattern; more benefit `scrape_targets` to discover (Shufersal benefits page is login-gated → deferred to v2, needs authenticated approach).
 - `headroom-ai` installed as a dependency but NOT yet integrated into the LLM fallback path (`lib/anthropic.ts`) → no token-compression in effect yet; decide whether/where to apply it.
 
@@ -62,4 +61,10 @@ The project pivoted from a personal task-management system to a **public Hebrew/
   - Real azrieli `scrape_targets` discovered & verified live by `scrape-target-builder` (saved as `lib/benefits/scrape-targets.sample.json` + `.README.md` + `_regex_test.mjs`, folded into seed); parser verified against a real sample → 2 benefits, correct savings (₪20, ₪49.10), ISO dates, deterministic path with no LLM needed.
   - Shufersal benefits page is login-gated → deferred to v2 (needs authenticated approach).
 - **Notes / Caveats:** `npm run build` green (16 routes), `tsc --noEmit` clean. Added `BRIGHTDATA_ZONE` to `.env.example` + `.env`. Still pending: real `DATABASE_URL`/`DIRECT_URL` to run migrate+seed; live BrightData token+zone for end-to-end cache-miss exercise; PRD §17 representative-branch-vs-aggregation decision; more chain adapters (Rami Levy, Carrefour, Yochananof).
+- **Related:** [[project-files-documentation]]
+
+### 2026-06-08 — Dev demo mode to unblock visual/UX navigation [shipped]
+- **What was done:** Goal was to make the app clickable for visual/UX review. Real blockers: local Postgres not running (`DATABASE_URL` → `localhost:5432`) and Google OAuth not configured (empty `GOOGLE_CLIENT_ID`/`SECRET`) — login + DB both impossible. Added a **dev-only demo mode**: new `lib/demo.ts` exports `IS_DEMO` (default ON outside production, OFF in production; `NEXT_PUBLIC_DEMO=0` forces real auth/DB in dev) plus mock datasets mirroring `prisma/seed.ts`. Wired into `lib/auth.ts` (`getSessionUser()` returns a constant `DEMO_USER`), `middleware.ts` (`authorized()` → true in demo), API routes `app/api/prices/search`, `app/api/benefits/{by-store,nearby,birthday}`, `app/api/profile` (GET+PATCH), server component `app/(app)/profile/page.tsx` (all short-circuit to mocks before touching Prisma), and `app/login/page.tsx` (new "כניסה למצב דמו" button).
+- **Decisions (why):** Kept the security invariant intact — the demo user id is a server-side constant, never read from the request body. Verified live via `npm run dev`: all five endpoints return 200, `/api/prices/search` groups by manufacturer and flags the cheapest for "חלב"/"במבה", benefit pages render, `tsc --noEmit` clean. Visual direction decided: keep the existing shadcn styling ("כמו שהכנו כבר") — no new design system.
+- **Notes / Caveats:** This unblocks *navigation* only; actual visual/UX polish has not started. Demo mode is dev-only by construction (`IS_DEMO` is OFF in production builds) — does not affect prod runtime or the real-DB/OAuth path once credentials are provisioned.
 - **Related:** [[project-files-documentation]]

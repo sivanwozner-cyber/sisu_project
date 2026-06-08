@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getStoreBenefits } from "@/lib/benefits";
+import { IS_DEMO, demoStoreBenefits, demoProfile } from "@/lib/demo";
 
 export async function POST(req: Request) {
   const user = await getSessionUser();
@@ -16,6 +17,18 @@ export async function POST(req: Request) {
   const storeSlug = body?.store_slug;
   if (!storeSlug || typeof storeSlug !== "string") {
     return NextResponse.json({ error: "store_slug required" }, { status: 400 });
+  }
+
+  if (IS_DEMO) {
+    const clubs = Array.isArray(body?.override_clubs)
+      ? body!.override_clubs!
+      : demoProfile.clubs;
+    return NextResponse.json({
+      user_clubs: clubs,
+      benefits: demoStoreBenefits(storeSlug, clubs),
+      cache_hit: true,
+      sources_failed: [],
+    });
   }
 
   const store = await prisma.store.findUnique({ where: { slug: storeSlug } });

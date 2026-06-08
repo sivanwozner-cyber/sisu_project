@@ -5,6 +5,10 @@ import { Sparkles, Tag, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+const IS_DEMO =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_DEMO !== "0";
+
 export default function LoginPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden p-6">
@@ -34,14 +38,26 @@ export default function LoginPage() {
             </span>
           </div>
 
-          <Button
-            variant="hero"
-            size="lg"
-            className="w-full"
-            onClick={() => signIn("google", { callbackUrl: "/" })}
-          >
-            התחבר עם Google
-          </Button>
+          <div className="space-y-3">
+            <Button
+              variant="hero"
+              size="lg"
+              className="w-full"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+            >
+              התחבר עם Google
+            </Button>
+            {IS_DEMO && (
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full"
+                onClick={() => (window.location.href = "/prices")}
+              >
+                כניסה למצב דמו (ללא התחברות)
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
     </main>

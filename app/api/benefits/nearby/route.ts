@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { matchMalls, getNearbyBenefits } from "@/lib/benefits";
+import {
+  IS_DEMO,
+  demoMatchMalls,
+  demoNearbyBenefits,
+} from "@/lib/demo";
 
 export async function POST(req: Request) {
   const user = await getSessionUser();
@@ -20,6 +25,20 @@ export async function POST(req: Request) {
 
   if (lat == null && lng == null && !manual) {
     return NextResponse.json({ error: "location required" }, { status: 400 });
+  }
+
+  if (IS_DEMO) {
+    const malls = demoMatchMalls(manual);
+    const benefits = demoNearbyBenefits(
+      malls.map((m) => m.slug),
+      Boolean(body?.include_upcoming),
+    );
+    return NextResponse.json({
+      matched_malls: malls,
+      benefits,
+      upcoming_count: 0,
+      sources_failed: [],
+    });
   }
 
   const malls = await matchMalls(lat, lng, manual);
