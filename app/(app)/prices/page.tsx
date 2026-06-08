@@ -93,17 +93,27 @@ export default function PricesPage() {
 
       {!loading &&
         groups?.map((g, gi) => (
-          <section key={gi} className="space-y-2">
+          <section
+            key={gi}
+            className="animate-fade-up space-y-2"
+            style={{ animationDelay: `${gi * 60}ms` }}
+          >
             <h2 className="text-sm font-semibold text-muted-foreground">
               {g.manufacturer ?? "ללא יצרן"}
             </h2>
             <div className="space-y-2">
               {g.items.map((it, ii) => (
-                <Card key={ii}>
+                <Card
+                  key={ii}
+                  className={cn(
+                    it.is_lowest &&
+                      "border-emerald-400/30 shadow-[0_0_30px_-12px_rgba(16,185,129,0.55)]",
+                  )}
+                >
                   <CardContent className="flex items-center justify-between gap-4 p-4">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium">
+                        <span className="font-semibold">
                           {STORE_NAMES[it.store] ?? it.store}
                         </span>
                         {it.is_lowest && (
@@ -118,7 +128,12 @@ export default function PricesPage() {
                         עודכן: {new Date(it.updated_at).toLocaleDateString("he-IL")}
                       </p>
                     </div>
-                    <div className="shrink-0 text-xl font-bold">
+                    <div
+                      className={cn(
+                        "shrink-0 text-2xl font-extrabold tabular-nums",
+                        it.is_lowest ? "text-emerald-300" : "text-foreground",
+                      )}
+                    >
                       ₪{it.price.toFixed(2)}
                     </div>
                   </CardContent>
