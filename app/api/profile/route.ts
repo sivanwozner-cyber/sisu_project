@@ -1,8 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSessionUser } from "@/lib/auth";
+import { IS_DEMO, DEMO_USER, demoProfile } from "@/lib/demo";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function demoSerialize() {
+  return {
+    id: DEMO_USER.id,
+    name: DEMO_USER.name,
+    email: DEMO_USER.email,
+    birthdate: demoProfile.birthdate,
+    clubs: demoProfile.clubs,
+    profile_complete: true,
+  };
+}
 
 type UserWithClubs = {
   id: string;
