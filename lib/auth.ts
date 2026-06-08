@@ -51,6 +51,9 @@ export function auth() {
 }
 
 export async function getSessionUser() {
+  // DEV-ONLY: in demo mode skip OAuth/DB and act as a fixed demo user. The id is
+  // a server-side constant — never read from the request — so the user_id rule holds.
+  if (IS_DEMO) return DEMO_USER;
   const session = await auth();
   return session?.user ?? null;
 }
