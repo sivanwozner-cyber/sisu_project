@@ -60,7 +60,7 @@ export function BenefitCard({ benefit }: { benefit: Benefit }) {
             href={benefit.club_app_url}
             target="_blank"
             rel="noreferrer"
-            className="inline-block text-sm font-medium text-primary transition hover:text-primary/80 hover:[text-shadow:0_0_10px_hsl(var(--primary)/0.6)]"
+            className="inline-block text-sm font-medium text-primary transition hover:text-primary/70"
           >
             לאפליקציה ←
           </a>

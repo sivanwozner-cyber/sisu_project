@@ -24,7 +24,7 @@ export default async function OnboardingPage() {
     <main className="relative flex min-h-screen items-center justify-center p-6">
       <Card className="w-full max-w-lg animate-fade-in-up">
         <CardHeader>
-          <CardTitle className="glow-text">ברוכים הבאים — בואו נגדיר את הפרופיל</CardTitle>
+          <CardTitle className="text-gradient">ברוכים הבאים — בואו נגדיר את הפרופיל</CardTitle>
         </CardHeader>
         <CardContent>
           <ProfileForm

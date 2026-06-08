@@ -18,8 +18,8 @@ export const NAV_LINKS = [
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="glass-dark hidden w-64 shrink-0 flex-col border-l border-white/5 p-4 md:flex">
-      <div className="glow-text mb-6 px-2 text-lg font-bold">מחירים והטבות</div>
+    <aside className="glass hidden w-64 shrink-0 flex-col border-l border-white/40 p-4 md:flex">
+      <div className="text-gradient mb-6 px-2 text-lg font-bold">מחירים והטבות</div>
       <nav className="flex flex-1 flex-col gap-1">
         {NAV_LINKS.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
@@ -30,8 +30,8 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all",
                 active
-                  ? "neon-border bg-primary/10 text-foreground"
-                  : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+                  ? "ring-soft font-semibold text-primary"
+                  : "text-muted-foreground hover:bg-white/50 hover:text-foreground",
               )}
             >
               <Icon

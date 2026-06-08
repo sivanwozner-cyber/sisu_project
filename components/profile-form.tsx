@@ -72,8 +72,8 @@ export function ProfileForm({
               className={cn(
                 "flex cursor-pointer items-center gap-2 rounded-md border p-3 text-sm transition-all",
                 selected.includes(c.slug)
-                  ? "neon-border bg-primary/10 text-foreground"
-                  : "border-border hover:border-primary/40",
+                  ? "ring-soft font-medium text-primary"
+                  : "border-white/60 bg-white/40 hover:border-primary/40",
               )}
             >
               <input

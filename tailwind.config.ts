@@ -63,25 +63,27 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        "glow-sm": "0 0 12px -2px hsl(var(--primary) / 0.45)",
-        glow: "0 0 24px -4px hsl(var(--primary) / 0.55)",
-        "glow-lg": "0 0 48px -6px hsl(var(--primary) / 0.65)",
-        "glow-violet": "0 0 24px -4px hsl(var(--secondary) / 0.6)",
+        "soft-sm": "0 4px 16px -6px hsl(240 40% 50% / 0.22)",
+        soft: "0 10px 34px -10px hsl(240 40% 48% / 0.28)",
+        "soft-lg": "0 22px 60px -16px hsl(255 50% 50% / 0.35)",
+        "soft-warm": "0 12px 34px -10px hsl(22 80% 55% / 0.4)",
       },
       backgroundImage: {
+        "gradient-warm":
+          "linear-gradient(120deg, hsl(255 75% 62%) 0%, hsl(300 70% 62%) 48%, hsl(22 92% 62%) 100%)",
+        "gradient-cool":
+          "linear-gradient(120deg, hsl(224 80% 66%) 0%, hsl(270 70% 66%) 100%)",
         "gradient-aurora":
-          "radial-gradient(60% 50% at 15% 0%, hsl(var(--primary) / 0.16) 0%, transparent 60%), radial-gradient(55% 45% at 100% 10%, hsl(var(--secondary) / 0.18) 0%, transparent 55%), radial-gradient(50% 60% at 80% 100%, hsl(var(--accent) / 0.12) 0%, transparent 60%)",
-        "gradient-neon":
-          "linear-gradient(120deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)",
+          "linear-gradient(135deg, hsl(224 70% 86%) 0%, hsl(262 55% 88%) 50%, hsl(28 88% 88%) 100%)",
       },
       keyframes: {
         "fade-in-up": {
           "0%": { opacity: "0", transform: "translateY(8px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 18px -6px hsl(var(--primary) / 0.5)" },
-          "50%": { boxShadow: "0 0 30px -4px hsl(var(--primary) / 0.85)" },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-4px)" },
         },
         shimmer: {
           "100%": { transform: "translateX(100%)" },
@@ -89,7 +91,7 @@ const config: Config = {
       },
       animation: {
         "fade-in-up": "fade-in-up 0.4s ease-out both",
-        "glow-pulse": "glow-pulse 2.4s ease-in-out infinite",
+        float: "float 4s ease-in-out infinite",
         shimmer: "shimmer 1.6s ease-in-out infinite",
       },
     },

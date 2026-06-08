@@ -58,7 +58,7 @@ export default function PricesPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="glow-text text-2xl font-bold">השוואת מחירים</h1>
+      <h1 className="text-gradient text-2xl font-bold">השוואת מחירים</h1>
 
       <form onSubmit={search} className="flex gap-2">
         <Input
@@ -97,7 +97,7 @@ export default function PricesPage() {
                   key={ii}
                   className={cn(
                     "animate-fade-in-up",
-                    it.is_lowest && "neon-border",
+                    it.is_lowest && "ring-soft",
                   )}
                   style={{ animationDelay: `${Math.min(ii, 6) * 60}ms` }}
                 >
@@ -122,7 +122,7 @@ export default function PricesPage() {
                     <div
                       className={cn(
                         "shrink-0 text-xl font-bold",
-                        it.is_lowest && "glow-text text-primary",
+                        it.is_lowest && "text-gradient",
                       )}
                     >
                       ₪{it.price.toFixed(2)}

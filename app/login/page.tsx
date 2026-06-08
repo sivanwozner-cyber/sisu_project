@@ -11,10 +11,10 @@ export default function LoginPage() {
       <Card className="w-full max-w-md animate-fade-in-up">
         <CardContent className="space-y-8 p-8 text-center">
           <div className="space-y-3">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-neon shadow-glow">
-              <Sparkles className="h-7 w-7 text-primary-foreground" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-warm shadow-soft-warm animate-float">
+              <Sparkles className="h-8 w-8 text-primary-foreground" />
             </div>
-            <h1 className="glow-text text-3xl font-bold tracking-tight">
+            <h1 className="text-gradient text-3xl font-bold tracking-tight">
               מחירים והטבות
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -35,9 +35,9 @@ export default function LoginPage() {
           </div>
 
           <Button
-            variant="neon"
+            variant="hero"
             size="lg"
-            className="w-full animate-glow-pulse"
+            className="w-full"
             onClick={() => signIn("google", { callbackUrl: "/" })}
           >
             התחבר עם Google
