@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { getBirthdayBenefits } from "@/lib/benefits";
+import { IS_DEMO, demoBirthdayBenefits } from "@/lib/demo";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
