@@ -4,6 +4,8 @@
 The project pivoted from a personal task-management system to a **public Hebrew/RTL price-comparison + benefits-finder web app** (replaces the old task system entirely). Stack: Next.js 14 (App Router) + TypeScript, Prisma, Supabase Postgres, NextAuth (Google OAuth), Tailwind + shadcn/ui. Two data sources: **official Israeli price-transparency feeds** for supermarket prices (not HTML scraping) and **BrightData** for benefits (clubs/malls/birthday). PRD v3.0 lives at repo-root `PRD-price-benefits-finder.md` and is intended to feed Claude Code Plan Mode. This topic also covers the planned `.claude/` architecture redesign (CLAUDE.md slimming, new skills, 3 sub-agents).
 
 ## Open Questions
+- Preview screenshot tool times out (environmental — `/api/prices/search` hangs without a running DB, so pages never reach network-idle); Aurora Glass redesign was verified via typecheck/lint/accessibility snapshots only, no rendered screenshots captured yet.
+- `/api/prices/search` returns no results / hangs in dev because no DB is running (demo wiring exists but the page stays pending) — separate from the redesign, not yet fixed.
 - Supabase project + real `DATABASE_URL`/`DIRECT_URL` not provisioned → `prisma migrate`/seed still cannot be run (seed code is ready and waiting).
 - Live `BRIGHTDATA_API_TOKEN` + `BRIGHTDATA_ZONE` not provided → cache-miss pipeline (fetch→parse→persist) wired but not exercised end-to-end.
 - Representative branch vs aggregation per chain for MVP prices (PRD §17) — still open/deferred.
