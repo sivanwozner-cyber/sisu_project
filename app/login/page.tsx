@@ -4,7 +4,9 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "1";
+const IS_DEMO =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NEXT_PUBLIC_DEMO !== "0";
 
 export default function LoginPage() {
   return (
