@@ -1,0 +1,8 @@
+{
+  "name": "visual-review-scripts",
+  "private": true,
+  "description": "Standalone Playwright deps for the visual-review skill — kept isolated so they never touch the project's package.json.",
+  "dependencies": {
+    "playwright": "1.56.1"
+  }
+}

@@ -65,13 +65,13 @@ export default function BenefitsPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold">הטבות לפי חנות</h1>
+      <h1 className="glow-text text-2xl font-bold">הטבות לפי חנות</h1>
 
-      <div className="space-y-4 rounded-lg border p-4">
+      <div className="glass-dark space-y-4 rounded-lg p-4">
         <div className="space-y-2">
           <label className="text-sm font-medium">חנות</label>
           <select
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+            className="flex h-10 w-full rounded-md border border-border bg-input/60 px-3 text-sm text-foreground transition-all focus-visible:border-primary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             value={storeSlug}
             onChange={(e) => setStoreSlug(e.target.value)}
           >

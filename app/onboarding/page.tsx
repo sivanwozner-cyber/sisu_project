@@ -21,10 +21,10 @@ export default async function OnboardingPage() {
   ]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <Card className="w-full max-w-lg">
+    <main className="relative flex min-h-screen items-center justify-center p-6">
+      <Card className="w-full max-w-lg animate-fade-in-up">
         <CardHeader>
-          <CardTitle>ברוכים הבאים — בואו נגדיר את הפרופיל</CardTitle>
+          <CardTitle className="glow-text">ברוכים הבאים — בואו נגדיר את הפרופיל</CardTitle>
         </CardHeader>
         <CardContent>
           <ProfileForm

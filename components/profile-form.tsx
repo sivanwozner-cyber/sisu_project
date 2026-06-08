@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 type Club = { slug: string; name: string };
 
@@ -68,7 +69,12 @@ export function ProfileForm({
           {clubs.map((c) => (
             <label
               key={c.slug}
-              className="flex cursor-pointer items-center gap-2 rounded-md border p-3 text-sm"
+              className={cn(
+                "flex cursor-pointer items-center gap-2 rounded-md border p-3 text-sm transition-all",
+                selected.includes(c.slug)
+                  ? "neon-border bg-primary/10 text-foreground"
+                  : "border-border hover:border-primary/40",
+              )}
             >
               <input
                 type="checkbox"
@@ -93,7 +99,7 @@ export function ProfileForm({
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
-      {savedMsg && <p className="text-sm text-green-600">{savedMsg}</p>}
+      {savedMsg && <p className="text-sm text-primary">{savedMsg}</p>}
 
       <div className="flex gap-3">
         <Button onClick={() => submit()} disabled={saving}>

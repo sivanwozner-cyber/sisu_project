@@ -29,7 +29,12 @@ const TYPE_LABEL: Record<Benefit["type"], string> = {
 
 export function BenefitCard({ benefit }: { benefit: Benefit }) {
   return (
-    <Card className={cn(benefit.is_expired && "opacity-50")}>
+    <Card
+      className={cn(
+        "animate-fade-in-up",
+        benefit.is_expired && "opacity-50",
+      )}
+    >
       <CardContent className="space-y-2 p-4">
         <div className="flex items-center justify-between gap-2">
           <Badge variant={benefit.type}>{TYPE_LABEL[benefit.type]}</Badge>
@@ -55,7 +60,7 @@ export function BenefitCard({ benefit }: { benefit: Benefit }) {
             href={benefit.club_app_url}
             target="_blank"
             rel="noreferrer"
-            className="inline-block text-sm font-medium text-primary hover:underline"
+            className="inline-block text-sm font-medium text-primary transition hover:text-primary/80 hover:[text-shadow:0_0_10px_hsl(var(--primary)/0.6)]"
           >
             לאפליקציה ←
           </a>

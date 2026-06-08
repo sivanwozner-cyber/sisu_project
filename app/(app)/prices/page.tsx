@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 type PriceItem = {
   store: string;
@@ -57,7 +58,7 @@ export default function PricesPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-2xl font-bold">השוואת מחירים</h1>
+      <h1 className="glow-text text-2xl font-bold">השוואת מחירים</h1>
 
       <form onSubmit={search} className="flex gap-2">
         <Input
@@ -92,7 +93,14 @@ export default function PricesPage() {
             </h2>
             <div className="space-y-2">
               {g.items.map((it, ii) => (
-                <Card key={ii}>
+                <Card
+                  key={ii}
+                  className={cn(
+                    "animate-fade-in-up",
+                    it.is_lowest && "neon-border",
+                  )}
+                  style={{ animationDelay: `${Math.min(ii, 6) * 60}ms` }}
+                >
                   <CardContent className="flex items-center justify-between gap-4 p-4">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
@@ -111,7 +119,12 @@ export default function PricesPage() {
                         עודכן: {new Date(it.updated_at).toLocaleDateString("he-IL")}
                       </p>
                     </div>
-                    <div className="shrink-0 text-xl font-bold">
+                    <div
+                      className={cn(
+                        "shrink-0 text-xl font-bold",
+                        it.is_lowest && "glow-text text-primary",
+                      )}
+                    >
                       ₪{it.price.toFixed(2)}
                     </div>
                   </CardContent>

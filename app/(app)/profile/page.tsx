@@ -22,7 +22,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold">פרופיל</h1>
+      <h1 className="glow-text text-2xl font-bold">פרופיל</h1>
       <Card>
         <CardContent className="pt-6">
           <ProfileForm
