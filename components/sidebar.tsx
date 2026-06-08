@@ -18,24 +18,39 @@ const links = [
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-l bg-card p-4">
-      <div className="mb-6 px-2 text-lg font-bold">מחירים והטבות</div>
+    <aside className="glass sticky top-0 flex h-screen w-64 shrink-0 flex-col border-y-0 border-r-0 border-l border-white/10 p-4">
+      <div className="mb-8 flex items-center gap-2 px-2">
+        <span className="h-7 w-7 rounded-lg bg-brand-gradient shadow-glow-sm" />
+        <span className="text-gradient text-lg font-extrabold tracking-tight">
+          מחירים והטבות
+        </span>
+      </div>
       <nav className="flex flex-1 flex-col gap-1">
-        {links.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={cn(
-              "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent",
-              pathname === href
-                ? "bg-accent text-accent-foreground"
-                : "text-muted-foreground",
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </Link>
-        ))}
+        {links.map(({ href, label, icon: Icon }) => {
+          const active = pathname === href;
+          return (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                active
+                  ? "bg-brand-gradient-soft text-foreground shadow-glow-sm ring-1 ring-aurora-teal/30"
+                  : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
+              )}
+            >
+              <Icon
+                className={cn(
+                  "h-4 w-4 transition-colors",
+                  active
+                    ? "text-aurora-teal"
+                    : "text-muted-foreground group-hover:text-aurora-teal",
+                )}
+              />
+              {label}
+            </Link>
+          );
+        })}
       </nav>
       <Button
         variant="ghost"
